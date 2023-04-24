@@ -1,20 +1,10 @@
-import 'package:dio/dio.dart';
-import 'package:dio_http_cache_lts/dio_http_cache_lts.dart';
-import 'package:driver_license_test/constant/Constant.dart';
-import 'package:driver_license_test/data/service/interceptor.dart';
-import 'package:injectable/injectable.dart';
+import 'package:driver_license_test/data/model/movie.dart';
+import 'package:driver_license_test/data/model/show.dart';
 
-@lazySingleton
-class ApiService {
-  late Dio _dio;
+abstract class ApiService {
+  Future<List<Movie>> getTrendingMovies();
 
-  Future<Dio> get dio async {
-    _dio = Dio()
-      ..interceptors
-          .add(DioCacheManager(CacheConfig(defaultMaxAge: const Duration(days: 7), maxMemoryCacheCount: 3)).interceptor)
-      ..interceptors.add(LoggingInterceptor())
-      ..options.connectTimeout = HttpConstant.TIME_OUT
-      ..options.responseType = ResponseType.json;
-    return _dio;
-  }
+  Future<List<Movie>> getRecentMovies();
+
+  Future<List<Show>> getRecentShows();
 }

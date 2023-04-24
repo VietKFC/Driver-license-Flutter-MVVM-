@@ -1,6 +1,14 @@
+import 'package:driver_license_test/config/environment.dart';
+import 'package:driver_license_test/ui/home/home_screen.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'di/dependency_injection.dart';
+
+void main() async {
+  String environment = const String.fromEnvironment("ENVIRONMENT",
+      defaultValue: Environment.DEV);
+  Environment.instance.initConfig(environment);
+  await configureDependencies();
   runApp(const MyApp());
 }
 
@@ -14,6 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      home: const HomeScreen(),
     );
   }
 }
