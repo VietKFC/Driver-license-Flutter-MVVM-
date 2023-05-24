@@ -1,4 +1,4 @@
-import 'package:driver_license_test/data/model/movie.dart';
+import 'package:driver_license_test/data/model/base_list_response.dart';
 import 'package:injectable/injectable.dart';
 
 import '../service/api_service.dart';
@@ -9,7 +9,10 @@ class MovieRepository {
 
   MovieRepository(this._apiService);
 
-  Future<List<Movie>> getTrendingMovie() => _apiService.getTrendingMovies();
+  Future<BaseListResponse> getUpcomingMovies() =>
+      _apiService.getUpcomingMovies();
 
-  Future<List<Movie>> getRecentMovies() => _apiService.getRecentMovies();
+  Future<BaseListResponse> getPopularMovies() => _apiService.getPopularMovies();
+
+  Future<BaseListResponse> getTopRateMovies() => _apiService.getTopRateMovies();
 }

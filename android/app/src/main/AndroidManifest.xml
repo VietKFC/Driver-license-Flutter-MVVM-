@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.driver_license_test">
    <application
-        android:label="driver_license_test"
+        android:label="Movie streaming"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

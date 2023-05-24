@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:driver_license_test/data/model/movie.dart';
-import 'package:driver_license_test/data/model/show.dart';
 import 'package:driver_license_test/data/service/api_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/http.dart';
+
+import '../model/base_list_response.dart';
 
 part 'api_service_impl.g.dart';
 
@@ -11,17 +12,18 @@ part 'api_service_impl.g.dart';
 @Injectable(as: ApiService)
 abstract class ApiServiceImpl extends ApiService {
   @factoryMethod
-  factory ApiServiceImpl(Dio dio, {required String baseUrl}) = _ApiServiceImpl;
+  factory ApiServiceImpl(Dio dio, {@Named("baseUrl") required String baseUrl}) =
+      _ApiServiceImpl;
 
   @override
-  @GET('/trending')
-  Future<List<Movie>> getTrendingMovies();
+  @GET('/movie/upcoming')
+  Future<BaseListResponse> getUpcomingMovies();
 
   @override
-  @GET('/recent-movies')
-  Future<List<Movie>> getRecentMovies();
+  @GET('/movie/popular')
+  Future<BaseListResponse> getPopularMovies();
 
   @override
-  @GET('recent-shows')
-  Future<List<Show>> getRecentShows();
+  @GET('/movie/top_rated')
+  Future<BaseListResponse> getTopRateMovies();
 }
