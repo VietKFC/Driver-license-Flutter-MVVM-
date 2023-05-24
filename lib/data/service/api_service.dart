@@ -1,10 +1,9 @@
-import 'package:driver_license_test/data/model/movie.dart';
-import 'package:driver_license_test/data/model/show.dart';
+import 'package:driver_license_test/data/model/base_list_response.dart';
 
 abstract class ApiService {
-  Future<List<Movie>> getTrendingMovies();
+  Future<BaseListResponse> getUpcomingMovies();
 
-  Future<List<Movie>> getRecentMovies();
+  Future<BaseListResponse> getPopularMovies();
 
-  Future<List<Show>> getRecentShows();
+  Future<BaseListResponse> getTopRateMovies();
 }
