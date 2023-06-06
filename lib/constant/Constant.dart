@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppConstant {
-
   static double get smallPadding => 8.0;
 
   static double get mediumPadding => 16.0;
@@ -15,7 +14,6 @@ class AppConstant {
   static double get largeRadius => 24.0;
 
   static const TIME_OUT = 10000;
-
 
   static const white = Color(0xFFFFFFFF);
   static const black = Color(0xFF000000);
@@ -41,4 +39,10 @@ class AppConstant {
   static const backgroundBottomSheet = Color.fromRGBO(38, 38, 38, 1);
   static const colorTextCancel = Color.fromRGBO(255, 255, 255, 0.6);
   static const backgroundDuration = Color.fromRGBO(23, 41, 76, 0.87);
+  static const Color whiteGrey = Color(0xFFFDFDFD);
+  static const Color dark = Color(0xFF303943);
+  static const Color color1A1A1A = Color.fromRGBO(26, 26, 26, 1);
+
+  static String youtubeThumbnail(String key) => "https://img.youtube"
+      ".com/vi/$key/0.jpg";
 }
