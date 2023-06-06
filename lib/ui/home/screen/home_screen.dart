@@ -1,9 +1,13 @@
 import 'package:driver_license_test/constant/Constant.dart';
 import 'package:driver_license_test/data/model/movie.dart';
+import 'package:driver_license_test/data/model/tvshow.dart';
 import 'package:driver_license_test/ui/home/viewmodel/home_viewmodel.dart';
 import 'package:driver_license_test/ui/home/widget/top_rated_movie_item.dart';
+import 'package:driver_license_test/ui/home/widget/tv_show_item.dart';
 import 'package:driver_license_test/ui/home/widget/upcoming_movie_item.dart';
+import 'package:driver_license_test/ui/home/widget/watch_list_item_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,9 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
   late HomeViewModel viewModel;
 
   void initData() {
+    final accountId = dotenv.env["ACCOUNT_ID"];
     viewModel = context.read<HomeViewModel>()
       ..getUpcomingMovies()
-      ..getTopRatedMovies();
+      ..getTopRatedMovies()
+      ..getTvShows();
+    if (accountId?.isNotEmpty == true) {
+      viewModel.getWatchListMovies(int.parse(accountId!));
+    }
   }
 
   @override
@@ -86,6 +95,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    StreamBuilder(
+                        stream: viewModel.watchListMovieStreamController.stream,
+                        builder: (context, snapShot) {
+                          if (snapShot.hasData) {
+                            final movies = snapShot.data as List<Movie>;
+                            if (movies.isNotEmpty) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Watch list',
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  watchListMoviesWidget(movies),
+                                ],
+                              );
+                            }
+                          }
+                          return const SizedBox();
+                        }),
+                    SizedBox(
+                      height: AppConstant.largePadding,
+                    ),
                     const Text(
                       'Upcoming',
                       style: TextStyle(
@@ -100,13 +134,51 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.w400),
                     ),
-                    topRatedListWidget()
+                    topRatedListWidget(),
+                    SizedBox(
+                      height: AppConstant.largePadding,
+                    ),
+                    const Text(
+                      'TV Shows',
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.w400),
+                    ),
+                    tvShowListWidget(),
+                    SizedBox(
+                      height: AppConstant.largePadding,
+                    ),
                   ],
                 ),
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget watchListMoviesWidget(List<Movie> movies) {
+    return Padding(
+      padding: EdgeInsets.only(top: AppConstant.smallPadding),
+      child: SizedBox(
+        width: double.infinity,
+        height: 193.0,
+        child: ListView.builder(
+            itemCount: movies.length,
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return (index > 0)
+                  ? Padding(
+                      padding: EdgeInsets.only(left: AppConstant.smallPadding),
+                      child: WatchListItemWidget(
+                        movie: movies[index],
+                      ),
+                    )
+                  : WatchListItemWidget(
+                      movie: movies[index],
+                    );
+            }),
       ),
     );
   }
@@ -178,7 +250,47 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           } else {
-            return const SizedBox();
+            return const Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator());
+          }
+        });
+  }
+
+  Widget tvShowListWidget() {
+    return StreamBuilder(
+        stream: viewModel.tvShowsStreamController.stream,
+        builder: (BuildContext context, AsyncSnapshot snapShot) {
+          if (snapShot.hasData) {
+            final tvShows = snapShot.data as List<TvShow>;
+            return Padding(
+              padding: EdgeInsets.only(top: AppConstant.smallPadding),
+              child: SizedBox(
+                width: double.infinity,
+                height: 163.0,
+                child: ListView.builder(
+                    itemCount: 7,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return (index > 0)
+                          ? Padding(
+                              padding: EdgeInsets.only(
+                                  left: AppConstant.smallPadding),
+                              child: TvShowItemWidget(
+                                tvShow: tvShows[index],
+                              ),
+                            )
+                          : TvShowItemWidget(
+                              tvShow: tvShows[index],
+                            );
+                    }),
+              ),
+            );
+          } else {
+            return const Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator());
           }
         });
   }
